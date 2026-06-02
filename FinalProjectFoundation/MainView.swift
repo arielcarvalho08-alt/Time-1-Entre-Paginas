@@ -22,7 +22,6 @@ struct MainView: View {
                 })
             }
             .tabItem { Label("Locais", systemImage: "list.bullet") }
-
             MapaView()
                 .tabItem { Label("Explorar", systemImage: "map")}
         }
