@@ -22,9 +22,8 @@ struct MainView: View {
                 })
             }
             .tabItem { Label("Locais", systemImage: "list.bullet") }
-
-            Text("Mapa")
-                .tabItem { Label("Explorar", systemImage: "map") }
+            MapaView()
+                .tabItem { Label("Explorar", systemImage: "map")}
         }
         .sheet(isPresented: $mostrandoFiltros) { FiltrosView() }
     }
