@@ -26,7 +26,7 @@ struct FiltrosView: View {
                                 .foregroundColor(.secondary)
                         }
                         Slider(value: $distanciaMaxima, in: 1...20, step: 1)}
-                    Toggle("Contato diponível", isOn: $contatoDisponivel)}
+                    Toggle("Contato disponível", isOn: $contatoDisponivel)}
                 Section(header: Text("Tipo de instituição")){
                     HStack{
                         Text("Bibliotecas comunitárias")
