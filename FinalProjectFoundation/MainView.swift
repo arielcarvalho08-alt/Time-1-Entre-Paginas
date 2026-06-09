@@ -13,8 +13,20 @@ struct MainView: View {
     var body: some View {
         TabView {
             NavigationView {
-                List {
-                    Text("Lista de locais")
+
+                List{
+                    LocalRowView(
+                        nome: "Cuca Mondubim",
+                        tipo: "Cucas",
+                        logradouro: "Rua Santa Morlan",
+                        numero: "S/N",
+                        bairro: "Mondubim",
+                        avaliacao: 4.7,
+                        abertoAgora: true,
+                        distancia: 3.2
+                    )
+
+
                 }
                 .navigationTitle("Lista de locais")
                 .navigationBarItems(trailing: Button(action: { mostrandoFiltros = true }) {
