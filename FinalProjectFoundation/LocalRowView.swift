@@ -10,23 +10,28 @@ import SwiftUI
 struct LocalRowView: View {
         let nome: String
         let tipo: String
+
         let logradouro: String
         let numero: String
         let bairro: String
         let avaliacao: Double
         let abertoAgora: Bool
         let distancia: Double
+
         
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
             RoundedRectangle(cornerRadius: 12)
                 .fill(Color(.systemGray5))
+
                 .frame(width: 110, height: 85)
+
                 .overlay(Image(systemName: "photo").foregroundColor(.gray))
             VStack(alignment: .leading, spacing: 4) {
                 Text(nome)
                     .font(.system(.headline, design: .rounded))
                     .fontWeight(.bold)
+
                 Text("\(tipo) • \(Int(distancia)) KM")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
@@ -34,10 +39,12 @@ struct LocalRowView: View {
                     .font(.caption)
                     .foregroundColor(.gray)
                     .lineLimit(1)
+
                 HStack {
                     Label(String(format: "%.1f", avaliacao), systemImage: "star.fill")
                         .font(.caption)
                         .foregroundColor(.orange)
+
                 }
             }
         }
