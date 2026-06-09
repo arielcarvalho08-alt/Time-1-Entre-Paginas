@@ -9,7 +9,9 @@ import SwiftUI
 
 struct FiltrosView: View {
     @Environment(\.dismiss) var dismiss
-    @ObservedObject var viewModel: LocaisViewModel
+    
+    @State private var abertoAgora = false
+    @State private var distanciaMaxima: Double = 5.0
     @State private var contatoDisponivel = false
     @State private var avaliacaoSelecionada: String = "Todas"
     @State private var tiposSelecionados: [String: Bool] = [
@@ -24,72 +26,80 @@ struct FiltrosView: View {
     var body: some View {
         NavigationView {
             List {
-                Section(header: Text("Status e Distância")) {
-                    Toggle("Aberto Agora", isOn: $viewModel.apenasAbertos)
-                        .tint(.blue)
+                Section(header: Text("Filtros")) {
+                    Toggle("Aberto Agora", isOn: $abertoAgora)
+                    
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Avaliação")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 8) {
+                                ForEach(opcoesAvaliacao, id: \.self) { opcao in
+                                    Button(action: {
+                                        avaliacaoSelecionada = opcao
+                                    }) {
+                                        Text(opcao)
+                                            .font(.footnote)
+                                            .fontWeight(.medium)
+                                            .padding(.horizontal, 12)
+                                            .padding(.vertical, 8)
+                                            .background(avaliacaoSelecionada == opcao ? Color.blue : Color(.systemGray5))
+                                            .foregroundColor(avaliacaoSelecionada == opcao ? .white : .primary)
+                                            .clipShape(Capsule())
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    .padding(.vertical, 4)
                     
                     VStack(alignment: .leading, spacing: 8) {
                         HStack {
                             Text("Distância Máxima")
                             Spacer()
-                            Text("\(Int(viewModel.distanciaMaxima)) KM")
+                            Text("\(Int(distanciaMaxima)) KM")
                                 .foregroundColor(.secondary)
-                                .fontWeight(.bold)
                         }
-                        Slider(value: $viewModel.distanciaMaxima, in: 1...30, step: 1)
+                        Slider(value: $distanciaMaxima, in: 1...20, step: 1)
                     }
-                    .padding(.vertical, 4)
-                }
-                
-                Section(header: Text("Avaliação Mínima")) {
-                    Picker("Avaliação", selection: $avaliacaoSelecionada) {
-                        ForEach(opcoesAvaliacao, id: \.self) { opcao in
-                            Text(opcao)
-                        }
-                    }
-                    .pickerStyle(.menu)
-                }
-                
-                Section(header: Text("Categorias de Locais")) {
-                    ForEach(tiposSelecionados.keys.sorted(), id: \.self) { chave in
-                        Toggle(chave, isOn: Binding(
-                            get: { tiposSelecionados[chave] ?? false },
-                            set: { tiposSelecionados[chave] = $0 }
-                        ))
-                        .tint(.blue)
-                    }
-                }
-                
-                Section(header: Text("Opções Adicionais")) {
+                    
                     Toggle("Contato disponível", isOn: $contatoDisponivel)
-                        .tint(.blue)
+                }
+                
+                Section(header: Text("Tipo de instituição")) {
+                    ForEach(tiposSelecionados.keys.sorted(), id: \.self) { tipo in
+                        HStack {
+                            Text(tipo)
+                            Spacer()
+                            if tiposSelecionados[tipo] == true {
+                                Image(systemName: "checkmark")
+                                    .foregroundColor(.blue)
+                            }
+                        }
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            tiposSelecionados[tipo]?.toggle()
+                        }
+                    }
                 }
             }
             .listStyle(InsetGroupedListStyle())
             .navigationBarTitle("Filtros", displayMode: .inline)
             .navigationBarItems(
-                leading: Button("Cancelar") {
-                    dismiss()
-                },
+                leading: Button("Cancelar") { dismiss() },
                 trailing: Button("Limpar Tudo") {
-                    viewModel.apenasAbertos = false
-                    viewModel.distanciaMaxima = 20.0
-                    
+                    abertoAgora = false
+                    distanciaMaxima = 5.0
                     contatoDisponivel = false
                     avaliacaoSelecionada = "Todas"
-                    for chave in tiposSelecionados.keys {
-                        tiposSelecionados[chave] = true
-                    }
+                    for key in tiposSelecionados.keys { tiposSelecionados[key] = true }
                 }
-                .foregroundColor(.red)
             )
         }
     }
 }
-
-
-
-
     //#Preview {
     //    FiltrosView()
     //}

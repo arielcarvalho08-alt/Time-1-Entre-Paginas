@@ -9,11 +9,11 @@ import Foundation
 import Combine
 
 class LocaisViewModel: ObservableObject {
-    @Published var textoPesquisa: String = ""
-    @Published var distanciaMaxima: Double = 20.0
-    @Published var apenasAbertos: Bool = false
-    
     @Published var locais: [Local] = []
+    @Published var textoPesquisa: String = ""
+    @Published var apenasAbertos: Bool = false {
+        didSet { carregarDadosdoBanco() }
+    }
     
     private var todosLocais: [Local] = []
     private var cancellables: Set<AnyCancellable> = []
@@ -21,10 +21,10 @@ class LocaisViewModel: ObservableObject {
     init() {
         carregarDadosdoBanco()
         
-        Publishers.CombineLatest3($textoPesquisa, $distanciaMaxima, $apenasAbertos)
+        $textoPesquisa
             .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
-            .sink { [weak self] texto, distancia, abertos in
-                self?.filtrarLocais(texto: texto, distanciaMax: distancia, abertosApenas: abertos)
+            .sink { [weak self] texto in
+                self?.filtrarLocais(por: texto)
             }
             .store(in: &cancellables)
     }
@@ -35,24 +35,20 @@ class LocaisViewModel: ObservableObject {
         self.locais = dadosDoBanco
     }
     
-    private func filtrarLocais(texto: String, distanciaMax: Double, abertosApenas: Bool) {
-        var resultado = todosLocais
+    private func filtrarLocais(por texto: String) {
+        var filtrados = todosLocais
         
         if !texto.isEmpty {
-            resultado = resultado.filter {
-                $0.nome.localizedCaseInsensitiveContains(texto) ||
+            filtrados = filtrados.filter {
+                $0.nome.localizedCaseInsensitiveContains(texto)  ||
                 $0.bairro.localizedCaseInsensitiveContains(texto)
             }
         }
         
-        if abertosApenas {
-            resultado = resultado.filter { $0.abertoAgora == true }
+        if apenasAbertos {
+            filtrados = filtrados.filter { $0.abertoAgora == true}
         }
         
-        resultado = resultado.filter { $0.distanciaSimulada <= distanciaMax }
-        
-        self.locais = resultado
+        self.locais = filtrados
     }
 }
-
-
