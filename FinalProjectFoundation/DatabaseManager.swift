@@ -18,14 +18,14 @@ class DatabaseManager {
     
     private func connectToDatabase() {
         guard let path = Bundle.main.path(forResource: "db", ofType: "sqlite") else {
-        print("Database not found")
+        print("Erro crítico: O arquivo db.sqlite não foi encontrado no projeto.")
             return
         }
         do {
             dbQueue = try DatabaseQueue(path: path)
-            print("Database connected")
+            print("Conexão com o banco do SQLite realizada com sucesso!")
         } catch {
-            print("Database connection error: \(error)")
+            print("Falha ao conectar via GRDB: \(error)")
         }
         }
     func fetchLocais() -> [Local] {

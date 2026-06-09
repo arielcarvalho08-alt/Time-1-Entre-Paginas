@@ -16,7 +16,7 @@ class LocaisViewModel: ObservableObject {
     private var cancellables: Set<AnyCancellable> = []
     
     init() {
-        carregarDados()
+        carregarDadosdoBanco()
         
         $textoPesquisa
             .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
@@ -26,7 +26,7 @@ class LocaisViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    func carregarDados() {
+    func carregarDadosdoBanco() {
         let dadosDoBanco = DatabaseManager.shared.fetchLocais()
         self.todosLocais = dadosDoBanco
         self.locais = dadosDoBanco
@@ -36,10 +36,10 @@ class LocaisViewModel: ObservableObject {
         if texto.isEmpty {
             self.locais = self.todosLocais
         } else {
-            self.locais =
-            self.todosLocais.filter { local in
+            self.locais = self.todosLocais.filter { local in
+                // Mudamos 'endereco' para procurar no 'bairro' ou no 'nome'
                 local.nome.localizedCaseInsensitiveContains(texto) ||
-                local.endereco.localizedStandardContains(texto)
+                local.bairro.localizedCaseInsensitiveContains(texto)
             }
         }
     }
