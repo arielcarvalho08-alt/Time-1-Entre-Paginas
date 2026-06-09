@@ -10,22 +10,29 @@ import SwiftUI
 struct MainView: View {
     @State private var mostrandoFiltros = false
 
+    @StateObject private var viewModel = LocaisViewModel()
+
     var body: some View {
         TabView {
             NavigationView {
 
-                List{
-                    LocalRowView(
-                        nome: "Cuca Mondubim",
-                        tipo: "Cucas",
-                        logradouro: "Rua Santa Morlan",
-                        numero: "S/N",
-                        bairro: "Mondubim",
+                VStack{
+                    TextField("Pesquisar por nome ou bairro...", text: $viewModel.textoPesquisa)
+                        .padding(8)
+                        .background(Color(.systemGray6))
+                        .cornerRadius(8)
+                        .padding(.horizontal)
+                    List(viewModel.locais){ local in LocalRowView(
+                        nome: local.nome,
+                        tipo: "Instituição",
+                        logradouro: local.logradouro,
+                        numero: local.numero,
+                        bairro: local.bairro,
                         avaliacao: 4.7,
-                        abertoAgora: true,
-                        distancia: 3.2
-                    )
-
+                        abertoAgora: local.abertoAgora,
+                        distancia: local.distanciaSimulada
+                        )
+                    }
 
                 }
                 .navigationTitle("Lista de locais")
