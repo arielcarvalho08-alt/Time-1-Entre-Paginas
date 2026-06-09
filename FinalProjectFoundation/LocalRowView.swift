@@ -8,25 +8,24 @@
 import SwiftUI
 
 struct LocalRowView: View {
-        let nome: String
-        let tipo: String
+    let nome: String
+    let tipo: String
+    let logradouro: String
+    let numero: String
+    let bairro: String
+    let avaliacao: Double
+    let abertoAgora: Bool
+    let distancia: Double
 
-        let logradouro: String
-        let numero: String
-        let bairro: String
-        let avaliacao: Double
-        let abertoAgora: Bool
-        let distancia: Double
-
-        
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color(.systemGray5))
-
+            Image(nome.localizedCaseInsensitiveContains("Cuca") ? "cuca_mondubim" : (nome.localizedCaseInsensitiveContains("Biblioteca") || nome.localizedCaseInsensitiveContains("BECE") ? "bece" : "photo"))
+                .resizable()
+                .scaledToFill()
                 .frame(width: 110, height: 85)
-
-                .overlay(Image(systemName: "photo").foregroundColor(.gray))
+                .cornerRadius(12)
+                .clipped() // Garante que a foto não mude o tamanho do quadrado cinza
+            
             VStack(alignment: .leading, spacing: 4) {
                 Text(nome)
                     .font(.system(.headline, design: .rounded))
@@ -35,6 +34,7 @@ struct LocalRowView: View {
                 Text("\(tipo) • \(Int(distancia)) KM")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
+                
                 Text("\(logradouro), \(numero) - \(bairro)")
                     .font(.caption)
                     .foregroundColor(.gray)
@@ -44,7 +44,6 @@ struct LocalRowView: View {
                     Label(String(format: "%.1f", avaliacao), systemImage: "star.fill")
                         .font(.caption)
                         .foregroundColor(.orange)
-
                 }
             }
         }
@@ -52,7 +51,7 @@ struct LocalRowView: View {
     }
 }
 
-
+//
 //#Preview {
 //    LocalRowView()
 //}
