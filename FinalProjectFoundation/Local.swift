@@ -9,20 +9,25 @@ import Foundation
 import GRDB
 
 struct Local: Identifiable, FetchableRecord, TableRecord, Decodable {
-    let id: Int64
+    let id: Int64?
     let nome: String
-    let tipo: String
-    let endereco: String
-    let avaliacao: Double
+    let logradouro: String
+    let numero: String
+    let bairro: String
+    let latitude: Double?
+    let longitude: Double?
+    let distanciaSimulada: Double
     let abertoAgora: Bool
-    let telefone: String
-    let distancia: String
+    let idTipoFk: Int
 
     static let databaseTableName = "locais"
 
     enum CodingKeys: String, CodingKey {
-        case id, nome, tipo, endereco, avaliacao, telefone, distancia
+        case id = "id_local"
+        case nome, logradouro, numero, bairro, latitude, longitude
+        case distanciaSimulada = "distancia_simulada"
         case abertoAgora = "aberto_agora"
+        case idTipoFk = "id_tipo_fk"
     }
 }
 
