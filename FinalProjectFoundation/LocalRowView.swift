@@ -26,7 +26,12 @@ struct LocalRowView: View {
 
                 .frame(width: 110, height: 85)
 
-                .overlay(Image(systemName: "photo").foregroundColor(.gray))
+                .overlay(Image(nome.localizedCaseInsensitiveContains("Cuca") ? "cuca_mondubim" : (nome.localizedCaseInsensitiveContains("Biblioteca") || nome.localizedCaseInsensitiveContains("BECE") ? "bece" : "photo"))
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 110, height: 85)
+                    .cornerRadius(12)
+                    .clipped())
             VStack(alignment: .leading, spacing: 4) {
                 Text(nome)
                     .font(.system(.headline, design: .rounded))
