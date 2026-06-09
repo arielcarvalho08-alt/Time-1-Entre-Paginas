@@ -47,6 +47,11 @@ struct MainView: View {
         .sheet(isPresented: $mostrandoFiltros) { FiltrosView() }
     }
 }
+    
+    //
+    //#Preview {
+    //    MainView()
+    //}
 
 
 #Preview {
