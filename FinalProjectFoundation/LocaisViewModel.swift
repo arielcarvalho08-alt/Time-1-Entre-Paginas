@@ -11,6 +11,9 @@ import Combine
 class LocaisViewModel: ObservableObject {
     @Published var locais: [Local] = []
     @Published var textoPesquisa: String = ""
+    @Published var apenasAbertos: Bool = false {
+        didSet { carregarDadosdoBanco() }
+    }
     
     private var todosLocais: [Local] = []
     private var cancellables: Set<AnyCancellable> = []
@@ -33,14 +36,19 @@ class LocaisViewModel: ObservableObject {
     }
     
     private func filtrarLocais(por texto: String) {
-        if texto.isEmpty {
-            self.locais = self.todosLocais
-        } else {
-            self.locais = self.todosLocais.filter { local in
-                // Mudamos 'endereco' para procurar no 'bairro' ou no 'nome'
-                local.nome.localizedCaseInsensitiveContains(texto) ||
-                local.bairro.localizedCaseInsensitiveContains(texto)
+        var filtrados = todosLocais
+        
+        if !texto.isEmpty {
+            filtrados = filtrados.filter {
+                $0.nome.localizedCaseInsensitiveContains(texto)  ||
+                $0.bairro.localizedCaseInsensitiveContains(texto)
             }
         }
+        
+        if apenasAbertos {
+            filtrados = filtrados.filter { $0.abertoAgora == true}
+        }
+        
+        self.locais = filtrados
     }
 }
