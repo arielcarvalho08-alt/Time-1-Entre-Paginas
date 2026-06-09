@@ -8,16 +8,27 @@
 import SwiftUI
 
 struct MainView: View {
+    @State private var mostrandoFiltros = false
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        TabView {
+            NavigationView {
+                List {
+                    Text("Lista de locais")
+                }
+                .navigationTitle("Lista de locais")
+                .navigationBarItems(trailing: Button(action: { mostrandoFiltros = true }) {
+                    Image(systemName: "line.3.horizontal.decrease.circle").font(.title2)
+                })
+            }
+            .tabItem { Label("Locais", systemImage: "list.bullet") }
+            MapaView()
+                .tabItem { Label("Explorar", systemImage: "map")}
         }
-        .padding()
+        .sheet(isPresented: $mostrandoFiltros) { FiltrosView() }
     }
 }
+
 
 #Preview {
     MainView()
