@@ -44,7 +44,7 @@ struct MainView: View {
             MapaView()
                 .tabItem { Label("Explorar", systemImage: "map")}
         }
-        .sheet(isPresented: $mostrandoFiltros) { FiltrosView() }
+        .sheet(isPresented: $mostrandoFiltros) { FiltrosView(viewModel: viewModel) }
     }
 }
 
