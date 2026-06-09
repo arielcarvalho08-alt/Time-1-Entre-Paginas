@@ -10,7 +10,6 @@ import SwiftUI
 struct LocalRowView: View {
         let nome: String
         let tipo: String
-
         let logradouro: String
         let numero: String
         let bairro: String
@@ -23,9 +22,7 @@ struct LocalRowView: View {
         HStack(alignment: .top, spacing: 12) {
             RoundedRectangle(cornerRadius: 12)
                 .fill(Color(.systemGray5))
-
                 .frame(width: 110, height: 85)
-
                 .overlay(Image(nome.localizedCaseInsensitiveContains("Cuca") ? "cuca_mondubim" : (nome.localizedCaseInsensitiveContains("Biblioteca") || nome.localizedCaseInsensitiveContains("BECE") ? "bece" : "photo"))
                     .resizable()
                     .scaledToFill()
@@ -49,7 +46,6 @@ struct LocalRowView: View {
                     Label(String(format: "%.1f", avaliacao), systemImage: "star.fill")
                         .font(.caption)
                         .foregroundColor(.orange)
-
                 }
             }
         }

@@ -19,17 +19,15 @@ struct Local: Identifiable, FetchableRecord, TableRecord, Decodable {
     let distanciaSimulada: Double
     let abertoAgora: Bool
     
-    // Ajustado para bater exatamente com o nome da tabela no SQLiteOnline
+
     static let databaseTableName = "Local"
 
-    // Mapeamento corrigido para bater com as colunas reais do banco
     enum CodingKeys: String, CodingKey {
         case id, nome, logradouro, numero, bairro, latitude, longitude
         case distanciaSimulada
         case abertoAgora
     }
 
-    // Inicializador customizado para transformar o Int (0 ou 1) do banco em Bool no Swift
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
@@ -42,7 +40,6 @@ struct Local: Identifiable, FetchableRecord, TableRecord, Decodable {
         self.longitude = try container.decodeIfPresent(Double.self, forKey: .longitude)
         self.distanciaSimulada = try container.decode(Double.self, forKey: .distanciaSimulada)
         
-        // Tenta ler como Int (do SQLite) e converte para Bool
         if let abertoInt = try? container.decode(Int.self, forKey: .abertoAgora) {
             self.abertoAgora = (abertoInt == 1)
         } else {
