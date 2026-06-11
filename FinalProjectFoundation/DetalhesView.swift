@@ -4,9 +4,7 @@
 //
 //  Created by Found on 09/06/26.
 //
-
 import SwiftUI
-
 struct DetalhesView: View {
     let local: Local
     
@@ -28,37 +26,37 @@ struct DetalhesView: View {
                         Text(local.abertoAgora ? "● Aberto Agora" : "● Fechado")
                             .font(.subheadline)
                             .fontWeight(.semibold)
-                            .foregroundColor(local.abertoAgora ? .green : .red)
-                        
-                        Text("•")
-                            .foregroundColor(.secondary)
-                        
-                        Text("\(Int(local.distanciaSimulada)) KM de distância")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                    }
-                    
-                    Divider()
-                    
-                    Text("Endereço Completo")
-                        .font(.headline)
-                        .foregroundColor(.secondary)
-                    
-                    Text("\(local.logradouro), Nº \(local.numero)")
-                        .font(.body)
-                    Text("Bairro: \(local.bairro)")
-                        .font(.body)
-                        .foregroundColor(.secondary)
-                }
-                .padding(.horizontal)
-            }
-            
-            .navigationBarTitle("Informações")
-            .navigationBarTitleDisplayMode(.inline)
-        }
-    }
-    
-    //#Preview {
-    //    DetalhesView()
-    //}
-}
+                                                     .foregroundColor(local.abertoAgora ? .green : .red)
+                                                 
+                                                 Text("•")
+                                                     .foregroundColor(.secondary)
+                                                 
+                                                 Text("\(Int(local.distanciaSimulada)) KM de distância")
+                                                     .font(.subheadline)
+                                                     .foregroundColor(.secondary)
+                                             }
+                                             
+                                             Divider()
+                                             
+                                             Text("Endereço Completo")
+                                                 .font(.headline)
+                                                 .foregroundColor(.secondary)
+                                             
+                                             Text("\(local.logradouro), Nº \(local.numero)")
+                                                 .font(.body)
+                                             Text("Bairro: \(local.bairro)")
+                                                 .font(.body)
+                                                 .foregroundColor(.secondary)
+                                         }
+                                         .padding(.horizontal)
+                                     }
+                                     
+                                     .navigationBarTitle("Informações")
+                                     .navigationBarTitleDisplayMode(.inline)
+                                 }
+                             }
+                             
+                             //#Preview {
+                             //    DetalhesView()
+                             //}
+                         }

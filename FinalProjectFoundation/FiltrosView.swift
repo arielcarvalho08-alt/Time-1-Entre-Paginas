@@ -52,6 +52,7 @@ struct FiltrosView: View {
                             Spacer()
                             Text("\(Int(viewModel.distanciaMaxima)) KM")
                                 .foregroundColor(.secondary)
+                                .fontWeight(.bold)
                         }
                         Slider(value: $viewModel.distanciaMaxima, in: 1...20, step: 1)
                     }
