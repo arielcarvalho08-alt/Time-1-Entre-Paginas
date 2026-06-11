@@ -5,6 +5,7 @@ struct FiltrosView: View {
     @ObservedObject var viewModel: LocaisViewModel
     
     @State private var contatoDisponivel = false
+
     @State private var tiposSelecionados: [String: Bool] = [
         "Bibliotecas Comunitárias": true,
         "Cucas (Rede Cuca)": true,
