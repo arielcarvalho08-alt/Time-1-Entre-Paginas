@@ -1,19 +1,10 @@
-//
-//  FiltrosView.swift
-//  FinalProjectFoundation
-//
-//  Created by Found on 02/06/26.
-//
-
 import SwiftUI
 
 struct FiltrosView: View {
     @Environment(\.dismiss) var dismiss
+    @ObservedObject var viewModel: LocaisViewModel
     
-    @State private var abertoAgora = false
-    @State private var distanciaMaxima: Double = 5.0
     @State private var contatoDisponivel = false
-    @State private var avaliacaoSelecionada: String = "Todas"
     @State private var tiposSelecionados: [String: Bool] = [
         "Bibliotecas Comunitárias": true,
         "Cucas (Rede Cuca)": true,
@@ -27,7 +18,7 @@ struct FiltrosView: View {
         NavigationView {
             List {
                 Section(header: Text("Filtros")) {
-                    Toggle("Aberto Agora", isOn: $abertoAgora)
+                    Toggle("Aberto Agora", isOn: $viewModel.apenasAbertos)
                     
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Avaliação")
@@ -38,15 +29,15 @@ struct FiltrosView: View {
                             HStack(spacing: 8) {
                                 ForEach(opcoesAvaliacao, id: \.self) { opcao in
                                     Button(action: {
-                                        avaliacaoSelecionada = opcao
+                                        viewModel.avaliacaoSelecionada = opcao
                                     }) {
                                         Text(opcao)
                                             .font(.footnote)
                                             .fontWeight(.medium)
                                             .padding(.horizontal, 12)
                                             .padding(.vertical, 8)
-                                            .background(avaliacaoSelecionada == opcao ? Color.blue : Color(.systemGray5))
-                                            .foregroundColor(avaliacaoSelecionada == opcao ? .white : .primary)
+                                            .background(viewModel.avaliacaoSelecionada == opcao ? Color.blue : Color(.systemGray5))
+                                            .foregroundColor(viewModel.avaliacaoSelecionada == opcao ? .white : .primary)
                                             .clipShape(Capsule())
                                     }
                                 }
@@ -59,10 +50,10 @@ struct FiltrosView: View {
                         HStack {
                             Text("Distância Máxima")
                             Spacer()
-                            Text("\(Int(distanciaMaxima)) KM")
+                            Text("\(Int(viewModel.distanciaMaxima)) KM")
                                 .foregroundColor(.secondary)
                         }
-                        Slider(value: $distanciaMaxima, in: 1...20, step: 1)
+                        Slider(value: $viewModel.distanciaMaxima, in: 1...20, step: 1)
                     }
                     
                     Toggle("Contato disponível", isOn: $contatoDisponivel)
@@ -90,17 +81,13 @@ struct FiltrosView: View {
             .navigationBarItems(
                 leading: Button("Cancelar") { dismiss() },
                 trailing: Button("Limpar Tudo") {
-                    abertoAgora = false
-                    distanciaMaxima = 5.0
+                    viewModel.apenasAbertos = false
+                    viewModel.distanciaMaxima = 20.0
+                    viewModel.avaliacaoSelecionada = "Todas"
                     contatoDisponivel = false
-                    avaliacaoSelecionada = "Todas"
                     for key in tiposSelecionados.keys { tiposSelecionados[key] = true }
                 }
             )
         }
     }
 }
-    //#Preview {
-    //    FiltrosView()
-    //}
-
