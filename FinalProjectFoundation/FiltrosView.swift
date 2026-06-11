@@ -5,7 +5,6 @@ struct FiltrosView: View {
     @ObservedObject var viewModel: LocaisViewModel
     
     @State private var contatoDisponivel = false
-
     @State private var tiposSelecionados: [String: Bool] = [
         "Bibliotecas Comunitárias": true,
         "Cucas (Rede Cuca)": true,
@@ -18,10 +17,34 @@ struct FiltrosView: View {
     var body: some View {
         NavigationView {
             List {
-                Section(header: Text("Status e Distância")) {
-                    // Liga o Toggle direto na ViewModel
+                Section(header: Text("Filtros")) {
                     Toggle("Aberto Agora", isOn: $viewModel.apenasAbertos)
-                        .tint(.blue)
+                    
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Avaliação")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 8) {
+                                ForEach(opcoesAvaliacao, id: \.self) { opcao in
+                                    Button(action: {
+                                        viewModel.avaliacaoSelecionada = opcao
+                                    }) {
+                                        Text(opcao)
+                                            .font(.footnote)
+                                            .fontWeight(.medium)
+                                            .padding(.horizontal, 12)
+                                            .padding(.vertical, 8)
+                                            .background(viewModel.avaliacaoSelecionada == opcao ? Color.blue : Color(.systemGray5))
+                                            .foregroundColor(viewModel.avaliacaoSelecionada == opcao ? .white : .primary)
+                                            .clipShape(Capsule())
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    .padding(.vertical, 4)
                     
                     VStack(alignment: .leading, spacing: 8) {
                         HStack {
@@ -33,32 +56,25 @@ struct FiltrosView: View {
                         }
                         Slider(value: $viewModel.distanciaMaxima, in: 1...30, step: 1)
                     }
-                    .padding(.vertical, 4)
+                    
+                    Toggle("Contato disponível", isOn: $contatoDisponivel)
                 }
                 
-                Section(header: Text("Avaliação Mínima")) {
-                    // Liga o Picker direto na ViewModel
-                    Picker("Avaliação", selection: $viewModel.avaliacaoSelecionada) {
-                        ForEach(opcoesAvaliacao, id: \.self) { opcao in
-                            Text(opcao)
+                Section(header: Text("Tipo de instituição")) {
+                    ForEach(tiposSelecionados.keys.sorted(), id: \.self) { tipo in
+                        HStack {
+                            Text(tipo)
+                            Spacer()
+                            if tiposSelecionados[tipo] == true {
+                                Image(systemName: "checkmark")
+                                    .foregroundColor(.blue)
+                            }
+                        }
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            tiposSelecionados[tipo]?.toggle()
                         }
                     }
-                    .pickerStyle(.menu)
-                }
-                
-                Section(header: Text("Categorias de Locais")) {
-                    ForEach(tiposSelecionados.keys.sorted(), id: \.self) { chave in
-                        Toggle(chave, isOn: Binding(
-                            get: { tiposSelecionados[chave] ?? false },
-                            set: { tiposSelecionados[chave] = $0 }
-                        ))
-                        .tint(.blue)
-                    }
-                }
-                
-                Section(header: Text("Opções Adicionais")) {
-                    Toggle("Contato disponível", isOn: $contatoDisponivel)
-                        .tint(.blue)
                 }
             }
             .listStyle(InsetGroupedListStyle())
@@ -69,10 +85,7 @@ struct FiltrosView: View {
                     viewModel.apenasAbertos = false
                     viewModel.distanciaMaxima = 20.0
                     viewModel.avaliacaoSelecionada = "Todas"
-                    contatoDisponivel = false
-                    for chave in tiposSelecionados.keys { tiposSelecionados[chave] = true }
                 }
-                .foregroundColor(.red)
             )
         }
     }

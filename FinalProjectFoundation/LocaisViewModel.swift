@@ -1,3 +1,10 @@
+//
+//  LocaisViewModel.swift
+//  FinalProjectFoundation
+//
+//  Created by Found on 02/06/26.
+//
+
 import Foundation
 import Combine
 
@@ -13,7 +20,6 @@ class LocaisViewModel: ObservableObject {
     
     init() {
         carregarDadosdoBanco()
-        
         Publishers.CombineLatest4($textoPesquisa, $distanciaMaxima, $apenasAbertos, $avaliacaoSelecionada)
             .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
             .sink { [weak self] texto, distancia, abertos, avaliacao in
@@ -29,33 +35,21 @@ class LocaisViewModel: ObservableObject {
     }
     
     private func filtrarLocais(texto: String, distanciaMax: Double, abertosApenas: Bool, avaliacaoMin: String) {
-        var resultado = todosLocais
-        
-        if !texto.isEmpty {
-            resultado = resultado.filter {
-                $0.nome.localizedCaseInsensitiveContains(texto) ||
-                $0.bairro.localizedCaseInsensitiveContains(texto)
-            }
-        }
-    
-        if abertosApenas {
-            resultado = resultado.filter { $0.abertoAgora == true }
-        }
-        
-        resultado = resultado.filter { $0.distanciaSimulada <= distanciaMax }
-        
-        if avaliacaoMin != "Todas" {
-            let apenasNumeros = avaliacaoMin
-                .replacingOccurrences(of: "+", with: "")
-                .replacingOccurrences(of: "★", with: "")
-                .replacingOccurrences(of: ",", with: ".")
-                .trimmingCharacters(in: .whitespacesAndNewlines)
+            var filtrados = todosLocais
             
-            if let notaCorte = Double(apenasNumeros) {
-                resultado = resultado.filter { _ in 4.7 >= notaCorte }
+            if !texto.isEmpty {
+                filtrados = filtrados.filter {
+                    $0.nome.localizedCaseInsensitiveContains(texto) ||
+                    $0.bairro.localizedCaseInsensitiveContains(texto)
+                }
             }
+            
+            if abertosApenas {
+                filtrados = filtrados.filter { $0.abertoAgora == true }
+            }
+            
+            filtrados = filtrados.filter { $0.distanciaSimulada <= distanciaMax }
+            
+            self.locais = filtrados
         }
-        
-        self.locais = resultado
     }
-}
