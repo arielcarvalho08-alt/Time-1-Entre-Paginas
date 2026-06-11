@@ -47,4 +47,27 @@ class DatabaseManager {
             return []
         }
     }
+    
+    func favoritarLocal(idLocal: Int64) {
+        guard let dbQueue = dbQueue else { return }
+        let dataAtual = DateFormatter.localizedString(from: Date(), dateStyle: .short, timeStyle: .none)
+        
+        try? dbQueue.write{ db in
+            let existe = try Int.fetchOne(db, sql: "SELECT COUNT(*) FROM Favorito WHERE idLocal = ?", arguments: [idLocal]) ?? 0
+            if existe == 0 {
+                try db.execute(sql: "INSERT INTO Favorito (idLocal, data_adicionar) VALUES (?, ?)", arguments: [idLocal, dataAtual])
+            }
+            else {
+                try db.execute(sql: "DELETE FROM Favorito WHERE Id_Local = ?", arguments: [idLocal])
+            }
+        }
+    }
+    
+    func verificarSeEFavorito(idLocal: Int64) -> Bool {
+        guard let dbQueue = dbQueue else { return false }
+        let quantidade = try? dbQueue.read { db in
+            try Int.fetchOne(db, sql: "SELECT COUNT(*) FROM Favorito WHERE idLocal = ?", arguments: [idLocal])
+        }
+        return (quantidade ?? 0) > 0
+    }
 }

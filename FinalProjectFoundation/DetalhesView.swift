@@ -1,14 +1,9 @@
-//
-//  DetalhesView.swift
-//  FinalProjectFoundation
-//
-//  Created by Found on 09/06/26.
-//
 import SwiftUI
 
 struct DetalhesView: View {
     let local: Local
     @State private var mostrarAlertaRota = false
+    @State private var isFavorited: Bool = false
     
     var body: some View {
         ScrollView {
@@ -20,9 +15,27 @@ struct DetalhesView: View {
                     .clipped()
                 
                 VStack(alignment: .leading, spacing: 16) {
-                    Text(local.nome)
-                        .font(.title2)
-                        .fontWeight(.bold)
+                    HStack(alignment: .center) {
+                        Text(local.nome)
+                            .font(.title2)
+                            .fontWeight(.bold)
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                            if let id = local.id {
+                                DatabaseManager.shared.favoritarLocal(idLocal: id)
+                                isFavorited.toggle()
+                            }
+                        }) {
+                            Image(systemName: isFavorited ? "heart.fill" : "heart")
+                                .foregroundColor(.red)
+                                .font(.title2)
+                                .padding(8)
+                                .background(Color(.systemGray6))
+                                .clipShape(Circle())
+                        }
+                    }
                     
                     Button(action: { mostrarAlertaRota = true }) {
                         Text("Traçar Rota")
@@ -54,27 +67,17 @@ struct DetalhesView: View {
                             } else {
                                 Text(horario.status_dia ?? "Fechado")
                                     .foregroundColor(.secondary)
-                                VStack(alignment: .leading, spacing: 8){
-                                    Text("Avaliações da Comunidade")
-                                        .font(.headline)
-                                    
-                                    if local.avaliacoes.isEmpty {
-                                        Text("Nenhum comentário ainda.")
-                                            .font(.subheadline)
-                                            .foregroundColor(.secondary)
-                                    } else {
-                                        ForEach(local.avaliacoes, id: \.id_avaliacao) { avaliacao in
-                                            AvaliacaoRowView(avaliacao: avaliacao)
-                                        }
-                                    }
-                                }
-                                .padding(.horizontal)
                             }
                         }
                         .font(.subheadline)
                     }
                 }
                 .padding(.horizontal)
+            }
+        }
+        .onAppear {
+            if let id = local.id {
+                isFavorited = DatabaseManager.shared.verificarSeEFavorito(idLocal: id)
             }
         }
         .alert(isPresented: $mostrarAlertaRota) {
