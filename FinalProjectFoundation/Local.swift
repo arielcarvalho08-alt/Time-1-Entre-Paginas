@@ -8,13 +8,16 @@
 import Foundation
 import GRDB
 
-struct Contato: FetchableRecord, TableRecord, Decodable{
+struct Contato: FetchableRecord, TableRecord, Decodable {
     let id_contato: Int64?
     let email: String?
     let telefone: String?
     let website: String?
+    
+    static let databaseTableName = "Contato"
 }
-struct HorarioFuncionamento: FetchableRecord, TableRecord, Decodable{
+
+struct HorarioFuncionamento: FetchableRecord, TableRecord, Decodable {
     let id_horario: Int64?
     let idLocal: Int64
     let dia_semana: String
@@ -22,9 +25,10 @@ struct HorarioFuncionamento: FetchableRecord, TableRecord, Decodable{
     let hora_abertura: String?
     let hora_fechamento: String?
     
-    static let databaseTableName = "Horario_funcionamnto"
+    static let databaseTableName = "Horario_Funcionamento"
 }
-struct Avaliacao: FetchableRecord, TableRecord, Decodable{
+
+struct Avaliacao: FetchableRecord, TableRecord, Decodable {
     let id_avaliacao: Int64?
     let idLocal: Int64
     let nota_estrelas: Double
@@ -32,13 +36,15 @@ struct Avaliacao: FetchableRecord, TableRecord, Decodable{
     
     static let databaseTableName = "Avaliacao"
 }
+
 struct Favorito: FetchableRecord, TableRecord, Decodable {
-    let id_favroito: Int64?
+    let id_favorito: Int64?
     let idLocal: Int64
     let data_adicionar: String?
     
     static let databaseTableName = "Favorito"
 }
+
 struct Local: Identifiable, FetchableRecord, TableRecord, Decodable {
     let id: Int64?
     let nome: String
@@ -47,7 +53,7 @@ struct Local: Identifiable, FetchableRecord, TableRecord, Decodable {
     let bairro: String
     let latitude: Double?
     let longitude: Double?
-    let distancia_simulada: Double 
+    let distancia_simulada: Double
     let aberto_agora: Bool
     
     var contato: Contato?
