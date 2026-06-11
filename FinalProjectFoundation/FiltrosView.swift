@@ -54,7 +54,7 @@ struct FiltrosView: View {
                                 .foregroundColor(.secondary)
                                 .fontWeight(.bold)
                         }
-                        Slider(value: $viewModel.distanciaMaxima, in: 1...30, step: 1)
+                        Slider(value: $viewModel.distanciaMaxima, in: 1...20, step: 1)
                     }
                     
                     Toggle("Contato disponível", isOn: $contatoDisponivel)
@@ -85,6 +85,8 @@ struct FiltrosView: View {
                     viewModel.apenasAbertos = false
                     viewModel.distanciaMaxima = 20.0
                     viewModel.avaliacaoSelecionada = "Todas"
+                    contatoDisponivel = false
+                    for key in tiposSelecionados.keys { tiposSelecionados[key] = true }
                 }
             )
         }

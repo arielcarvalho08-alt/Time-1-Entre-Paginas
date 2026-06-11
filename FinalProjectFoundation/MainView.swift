@@ -41,7 +41,7 @@ struct MainView: View {
         .sheet(isPresented: $mostrandoFiltros) { FiltrosView(viewModel: viewModel) }
     }
 }
-
+    
     //
     //#Preview {
     //    MainView()
