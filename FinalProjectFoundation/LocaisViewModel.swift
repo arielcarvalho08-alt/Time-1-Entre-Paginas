@@ -1,10 +1,3 @@
-//
-//  LocaisViewModel.swift
-//  FinalProjectFoundation
-//
-//  Created by Found on 02/06/26.
-//
-
 import Foundation
 import Combine
 
@@ -21,7 +14,7 @@ class LocaisViewModel: ObservableObject {
     init() {
         carregarDadosdoBanco()
         Publishers.CombineLatest4($textoPesquisa, $distanciaMaxima, $apenasAbertos, $avaliacaoSelecionada)
-            .debounce(for: .milliseconds(300), scheduler: RunLoop.main) // Espera o usuário parar de digitar
+            .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
             .sink { [weak self] texto, distancia, abertos, avaliacao in
                 self?.filtrarLocais(texto: texto, distanciaMax: distancia, abertosApenas: abertos, avaliacaoMin: avaliacao)
             }
@@ -30,6 +23,9 @@ class LocaisViewModel: ObservableObject {
     
     func carregarDadosdoBanco() {
         let dadosDoBanco = DatabaseManager.shared.fetchLocais()
+        print("====== TESTE DE BANCO ======")
+        print("Quantidade de locais encontrados: \(dadosDoBanco.count)")
+        print("============================")
         self.todosLocais = dadosDoBanco
         self.locais = dadosDoBanco
     }
@@ -45,10 +41,14 @@ class LocaisViewModel: ObservableObject {
         }
         
         if abertosApenas {
-            filtrados = filtrados.filter { $0.abertoAgora == true }
+            filtrados = filtrados.filter { $0.aberto_agora == true }
         }
         
-        filtrados = filtrados.filter { $0.distanciaSimulada <= distanciaMax }
+        filtrados = filtrados.filter { $0.distancia_simulada <= distanciaMax }
+        
+        if avaliacaoMin != "Todas", let notaMinima = Double(avaliacaoMin) {
+            filtrados = filtrados.filter { $0.mediaAvaliacao >= notaMinima }
+        }
         
         self.locais = filtrados
     }
