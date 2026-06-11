@@ -8,51 +8,49 @@
 import SwiftUI
 
 struct LocalRowView: View {
-        let nome: String
-        let tipo: String
-        let logradouro: String
-        let numero: String
-        let bairro: String
-        let avaliacao: Double
-        let abertoAgora: Bool
-        let distancia: Double
-
+    let local: Local
         
     var body: some View {
-        HStack(alignment: .top, spacing: 12) {
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color(.systemGray5))
-                .frame(width: 110, height: 85)
-                .overlay(Image(nome.localizedCaseInsensitiveContains("Cuca") ? "cuca_mondubim" : (nome.localizedCaseInsensitiveContains("Biblioteca") || nome.localizedCaseInsensitiveContains("BECE") ? "bece" : "photo"))
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 110, height: 85)
-                    .cornerRadius(12)
-                    .clipped())
+        VStack(alignment: .leading, spacing: 0) {
+            Image(local.nome.localizedCaseInsensitiveContains("Cuca") ? "cuca_mondubim" : "bece")
+                .resizable()
+                .scaledToFill()
+                .frame(height: 160)
+                .cornerRadius(12)
+                .clipped()
             VStack(alignment: .leading, spacing: 4) {
-                Text(nome)
-                    .font(.system(.headline, design: .rounded))
+                Text(local.nome)
+                    .font(.headline)
                     .fontWeight(.bold)
-
-                Text("\(tipo) • \(Int(distancia)) KM")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-                Text("\(logradouro), \(numero) - \(bairro)")
-                    .font(.caption)
-                    .foregroundColor(.gray)
-                    .lineLimit(1)
-
+                    .foregroundColor(.primary)
+                
                 HStack {
-                    Label(String(format: "%.1f", avaliacao), systemImage: "star.fill")
-                        .font(.caption)
+                    Text(String(format: "􀋃 %.1f", local.mediaAvaliacao))
                         .foregroundColor(.orange)
+                        .font(.subheadline)
+                    Text("•")
+                    Text("\(local.bairro)")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                    Spacer()
+                    Text(local.aberto_agora ? "aberto" : "fechado")
+                        .font(.caption)
+                        .bold()
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(local.aberto_agora ? Color.green.opacity(0.2) : Color.red.opacity(0.2))
+                        .foregroundColor(local.aberto_agora ? .green : .red)
+                        .cornerRadius(8)
                 }
             }
+            .padding(12)
         }
-        .padding(.vertical, 4)
-    }
-}
-
+        .background(Color(.systemBackground))
+        .cornerRadius(12)
+        .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
+        .padding(.vertical, 6)
+            }
+        }
 
 //#Preview {
 //    LocalRowView()
