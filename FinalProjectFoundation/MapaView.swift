@@ -17,17 +17,15 @@ struct MapaPin: Identifiable {
 struct MapaView: View {
     @ObservedObject var viewModel: LocaisViewModel
     @State private var region = MKCoordinateRegion(
-        center: CLLocationCoordinate2D(latitude: -3.7319, longitude: -38.5267), // Centro de Fortaleza
+        center: CLLocationCoordinate2D(latitude: -3.7319, longitude: -38.5267),
         span: MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
     )
     
     var body: some View {
-        Map(coordinateRegion: $regiao, annotationItems: viewModel.locais) { local in
-            MapAnnotation(coordinate: CLLocationCoordinate2D(latitude: local.latitude ?? -3.7318, longitude: local.longitude ?? -38.5266)) {
-                Button(action: {
-                    localSelecionado = local // Ativa o Card (Tela 5)
-                }) {
-                    Image(systemName: "mappin")
+        Map(coordinateRegion: $region, annotationItems: obterPinos()) { pino in
+            MapAnnotation(coordinate: pino.coordinate) {
+                VStack(spacing: 4) {
+                    Image(systemName: "mappin.circle.fill")
                         .font(.title)
                         .foregroundColor(.red)
                     Text(pino.name)
