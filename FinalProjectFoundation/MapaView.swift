@@ -22,7 +22,7 @@ struct MapaView: View {
                 Button(action: {
                     localSelecionado = local // Ativa o Card (Tela 5)
                 }) {
-                    Image(systemName: "mappin.circle.fill")
+                    Image(systemName: "mappin")
                         .font(.title)
                         .foregroundColor(.red)
                 }
