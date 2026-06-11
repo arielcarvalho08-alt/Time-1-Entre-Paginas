@@ -1,9 +1,3 @@
-//
-//  FiltrosView.swift
-//  FinalProjectFoundation
-//
-//  Created by Found on 02/06/26.
-//
 import SwiftUI
 
 struct FiltrosView: View {
@@ -24,6 +18,7 @@ struct FiltrosView: View {
         NavigationView {
             List {
                 Section(header: Text("Status e Distância")) {
+                    // Liga o Toggle direto na ViewModel
                     Toggle("Aberto Agora", isOn: $viewModel.apenasAbertos)
                         .tint(.blue)
                     
@@ -41,6 +36,7 @@ struct FiltrosView: View {
                 }
                 
                 Section(header: Text("Avaliação Mínima")) {
+                    // Liga o Picker direto na ViewModel
                     Picker("Avaliação", selection: $viewModel.avaliacaoSelecionada) {
                         ForEach(opcoesAvaliacao, id: \.self) { opcao in
                             Text(opcao)
@@ -80,9 +76,3 @@ struct FiltrosView: View {
         }
     }
 }
-
-
-    //#Preview {
-    //    FiltrosView()
-    //}
-

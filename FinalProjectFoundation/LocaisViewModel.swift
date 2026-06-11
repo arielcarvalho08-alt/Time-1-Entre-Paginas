@@ -1,9 +1,3 @@
-//
-//  LocaisViewModel.swift
-//  FinalProjectFoundation
-//
-//  Created by Found on 02/06/26.
-//
 import Foundation
 import Combine
 
@@ -12,7 +6,6 @@ class LocaisViewModel: ObservableObject {
     @Published var distanciaMaxima: Double = 20.0
     @Published var apenasAbertos: Bool = false
     @Published var avaliacaoSelecionada: String = "Todas"
-    
     @Published var locais: [Local] = []
     
     private var todosLocais: [Local] = []
@@ -44,13 +37,13 @@ class LocaisViewModel: ObservableObject {
                 $0.bairro.localizedCaseInsensitiveContains(texto)
             }
         }
-        
+    
         if abertosApenas {
             resultado = resultado.filter { $0.abertoAgora == true }
         }
         
         resultado = resultado.filter { $0.distanciaSimulada <= distanciaMax }
-       
+        
         if avaliacaoMin != "Todas" {
             let apenasNumeros = avaliacaoMin
                 .replacingOccurrences(of: "+", with: "")
@@ -59,9 +52,7 @@ class LocaisViewModel: ObservableObject {
                 .trimmingCharacters(in: .whitespacesAndNewlines)
             
             if let notaCorte = Double(apenasNumeros) {
-            
-                let notaSimulada = 4.7
-                resultado = resultado.filter { _ in notaSimulada >= notaCorte }
+                resultado = resultado.filter { _ in 4.7 >= notaCorte }
             }
         }
         
