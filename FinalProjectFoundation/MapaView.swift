@@ -20,9 +20,9 @@ struct MapaView: View {
         Map(coordinateRegion: $regiao, annotationItems: viewModel.locais) { local in
             MapAnnotation(coordinate: CLLocationCoordinate2D(latitude: local.latitude ?? -3.7318, longitude: local.longitude ?? -38.5266)) {
                 Button(action: {
-                    localSelecionado = local
+                    localSelecionado = local // Ativa o Card (Tela 5)
                 }) {
-                    Image(systemName: "mappin.circle.fill")
+                    Image(systemName: "mappin")
                         .font(.title)
                         .foregroundColor(.red)
                 }
