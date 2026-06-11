@@ -38,7 +38,7 @@ struct MainView: View {
             .tabItem { Label("Locais", systemImage: "list.bullet") }
             .tag(0)
             
-            MapaView()
+            MapaView(viewModel: viewModel)
                 .tabItem { Label("Explorar", systemImage: "map")}
                 .tag(1)
         }
@@ -48,10 +48,10 @@ struct MainView: View {
                 title: Text("Permitir Localização?"),
                 message: Text("O aplicativo precisa da sua localização para calcular a distância exata até os centros culturais."),
                 primaryButton: .default(Text("Permitir")) {
-                    abaSelecionada = 1 // Abre no Mapa (Tela 1)
+                    abaSelecionada = 1
                 },
                 secondaryButton: .cancel(Text("Não Permitir")) {
-                    abaSelecionada = 0 // Abre na Lista (Tela 2)
+                    abaSelecionada = 0
                 }
             )
         }
