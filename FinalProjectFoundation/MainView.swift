@@ -4,18 +4,13 @@
 //
 //  Created by Beatriz Leonel on 28/05/26.
 //
-
 import SwiftUI
-
 struct MainView: View {
     @State private var mostrandoFiltros = false
-
     @StateObject private var viewModel = LocaisViewModel()
-
     var body: some View {
         TabView {
             NavigationView {
-
                 VStack{
                     TextField("Pesquisar por nome ou bairro...", text: $viewModel.textoPesquisa)
                         .padding(8)
@@ -33,7 +28,6 @@ struct MainView: View {
                         distancia: local.distanciaSimulada
                         )
                     }
-
                 }
                 .navigationTitle("Lista de locais")
                 .navigationBarItems(trailing: Button(action: { mostrandoFiltros = true }) {
@@ -44,7 +38,7 @@ struct MainView: View {
             MapaView()
                 .tabItem { Label("Explorar", systemImage: "map")}
         }
-        .sheet(isPresented: $mostrandoFiltros) { FiltrosView() }
+        .sheet(isPresented: $mostrandoFiltros) { FiltrosView(viewModel: viewModel) }
     }
 }
     
@@ -52,8 +46,7 @@ struct MainView: View {
     //#Preview {
     //    MainView()
     //}
-
-
 #Preview {
     MainView()
 }
+

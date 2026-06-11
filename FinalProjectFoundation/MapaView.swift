@@ -17,7 +17,7 @@ struct MapaView: View {
     
     var body: some View {
         NavigationView {
-            Map(coordinateRegion: $regiao, annotationItems: viewModel.locais) { local in 
+            Map(coordinateRegion: $regiao, annotationItems: viewModel.locais) { local in
                 MapAnnotation(coordinate: CLLocationCoordinate2D(latitude: local.latitude ?? -3.7318, longitude: local.longitude ?? -38.5266)) {
                     VStack(spacing: 0) {
                         Image(systemName: "mappin")
