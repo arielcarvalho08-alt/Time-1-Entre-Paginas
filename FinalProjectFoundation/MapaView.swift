@@ -8,11 +8,16 @@
 import SwiftUI
 import MapKit
 
+struct MapaPin: Identifiable {
+    let id = UUID()
+    let name: String
+    let coordinate: CLLocationCoordinate2D
+}
+
 struct MapaView: View {
-    @StateObject private var viewModel = LocaisViewModel()
-    @State private var localSelecionado: Local? = nil
-    @State private var regiao = MKCoordinateRegion(
-        center: CLLocationCoordinate2D(latitude: -3.7318, longitude: -38.5266),
+    @ObservedObject var viewModel: LocaisViewModel
+    @State private var region = MKCoordinateRegion(
+        center: CLLocationCoordinate2D(latitude: -3.7319, longitude: -38.5267), // Centro de Fortaleza
         span: MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
     )
     
@@ -25,14 +30,26 @@ struct MapaView: View {
                     Image(systemName: "mappin")
                         .font(.title)
                         .foregroundColor(.red)
+                    Text(pino.name)
+                        .font(.caption)
+                        .bold()
+                        .padding(4)
+                        .background(Color.white)
+                        .cornerRadius(4)
+                        .shadow(radius: 2)
                 }
             }
         }
-        .sheet(item: $localSelecionado) { local in
-            DetalhesView(local: local)
+        .edgesIgnoringSafeArea(.all)
+    }
+    
+    private func obterPinos() -> [MapaPin] {
+        return viewModel.locais.compactMap { local in
+            guard let lat = local.latitude, let lon = local.longitude else { return nil }
+            return MapaPin(name: local.nome, coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon))
         }
     }
 }
-#Preview {
-    MapaView()
-}
+//#Preview {
+//    MapaView()
+//}
