@@ -20,27 +20,30 @@ struct MapaView: View {
         center: CLLocationCoordinate2D(latitude: -3.7319, longitude: -38.5267),
         span: MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
     )
+    @State private var localSelecionado: Local?
     
     var body: some View {
-        Map(coordinateRegion: $region, annotationItems: obterPinos()) { pino in
-            MapAnnotation(coordinate: pino.coordinate) {
-                VStack(spacing: 4) {
-                    Image(systemName: "mappin.circle.fill")
-                        .font(.title)
-                        .foregroundColor(.red)
-                    Text(pino.name)
-                        .font(.caption)
-                        .bold()
-                        .padding(4)
-                        .background(Color.white)
-                        .cornerRadius(4)
-                        .shadow(radius: 2)
+        ZStack(alignment: .bottom){
+            Map(coordinateRegion: $region, annotationItems: obterPinos()) { pino in
+                MapAnnotation(coordinate: pino.coordinate) {
+                    Button(action: {
+                        withAnimation{
+                            localSelecionado = viewModel.locais.first { $0.nome == pino.name}
+                        }
+                    }) {
+                        Image(systemName: "mappin")
+                            .font(.title)
+                            .foregroundColor(.red)
+                    }
                 }
             }
+            .edgesIgnoringSafeArea(.all)
+            if let local = localSelecionado {
+                MapaCardView(local: local, localSelecionado: $localSelecionado)
+                    .padding(.bottom, 60)
+            }
         }
-        .edgesIgnoringSafeArea(.all)
     }
-    
     private func obterPinos() -> [MapaPin] {
         return viewModel.locais.compactMap { local in
             guard let lat = local.latitude, let lon = local.longitude else { return nil }
