@@ -11,9 +11,7 @@ struct LocalRowView: View {
     let local: Local
         
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            // Imagem que ocupa o topo do Card (Igual ao Figma)
-            Image(local.nome.localizedCaseInsensitiveContains("Cuca") ? "cuca_mondubim" : "bece")
+        VStack(alignment: .leading, spacing: 0) {            Image(local.nome.localizedCaseInsensitiveContains("Cuca") ? "cuca_mondubim" : "bece")
                 .resizable()
                 .scaledToFill()
                 .frame(height: 160)
@@ -27,14 +25,12 @@ struct LocalRowView: View {
                     .foregroundColor(.primary)
                 
                 HStack {
-                    // Trocado o caractere corrompido pelo símbolo de estrela nativo do iOS
                     Text(String(format: "★ %.1f", local.mediaAvaliacao))
                         .foregroundColor(.orange)
                         .font(.subheadline)
                     
                     Text("•")
                     
-                    // CORREÇÃO: Adicionada a distância que estava faltando e dava erro!
                     Text(String(format: "%.1f km", local.distancia_simulada))
                         .font(.subheadline)
                         .foregroundColor(.secondary)
@@ -47,7 +43,6 @@ struct LocalRowView: View {
                     
                     Spacer()
                     
-                    // Status de funcionamento lido do banco (snake_case)
                     Text(local.aberto_agora ? "Aberto" : "Fechado")
                         .font(.caption)
                         .bold()
