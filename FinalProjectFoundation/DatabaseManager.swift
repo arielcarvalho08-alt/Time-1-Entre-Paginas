@@ -58,7 +58,7 @@ class DatabaseManager {
                 try db.execute(sql: "INSERT INTO Favorito (idLocal, data_adicionar) VALUES (?, ?)", arguments: [idLocal, dataAtual])
             }
             else {
-                try db.execute(sql: "DELETE FROM Favorito WHERE Id_Local = ?", arguments: [idLocal])
+                try db.execute(sql: "DELETE FROM Favorito WHERE id_Local = ?", arguments: [idLocal])
             }
         }
     }
