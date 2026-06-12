@@ -45,6 +45,7 @@ struct MainView: View {
                 .tag(1)
         }
         .sheet(isPresented: $mostrandoFiltros) { FiltrosView(viewModel: viewModel) }
+        .accentColor(.verdePrincipal)
     }
 }
 

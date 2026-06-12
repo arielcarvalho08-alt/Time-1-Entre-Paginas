@@ -43,7 +43,7 @@ struct DetalhesView: View {
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
                             .padding()
-                            .background(Color.blue)
+                            .background(Color.verdePrincipal)
                             .cornerRadius(10)
                     }
                     
