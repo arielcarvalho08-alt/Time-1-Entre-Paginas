@@ -68,6 +68,23 @@ struct DetalhesView: View {
                                 Text(horario.status_dia ?? "Fechado")
                                     .foregroundColor(.secondary)
                             }
+                            
+                            Divider().padding(.vertical, 8)
+
+                            VStack(alignment: .leading, spacing: 12) {
+                                Text("Avaliações da Comunidade")
+                                    .font(.headline)
+                                
+                                if local.avaliacoes.isEmpty {
+                                    Text("Nenhum comentário enviado.")
+                                        .font(.subheadline)
+                                        .foregroundColor(.secondary)
+                                } else {
+                                    ForEach(local.avaliacoes, id: \.id_avaliacao) { avaliacao in
+                                        AvaliacaoRowView(avaliacao: avaliacao)
+                                    }
+                                }
+                            }
                         }
                         .font(.subheadline)
                     }
