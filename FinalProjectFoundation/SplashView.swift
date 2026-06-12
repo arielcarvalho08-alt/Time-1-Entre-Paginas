@@ -7,6 +7,11 @@
 
 import SwiftUI
 
+extension Color {
+    static let verdePrincipal = Color(red: 0.05, green: 0.4, blue: 0.15)
+    static let verdeDegradeFim = Color(red: 0.15, green: 0.6, blue: 0.25)
+}
+
 struct SplashView: View {
     @State private var exibirAlertaLocalizacao = false
     @State private var redirecionarParaApp = false
@@ -18,7 +23,7 @@ struct SplashView: View {
         } else {
             ZStack {
                 LinearGradient(
-                    gradient: Gradient(colors: [Color(red: 0.05, green: 0.4, blue:0.15), Color(red: 0.15, green: 0.6, blue: 0.25)]),
+                    gradient: Gradient(colors: [.verdePrincipal, .verdeDegradeFim]),
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )
@@ -34,13 +39,13 @@ struct SplashView: View {
                         .foregroundColor(.white)
                         .shadow(radius: 10)
                     
-                    Text("CultFortiri")
+                    Text("Entre Páginas")
                         .font(.largeTitle)
                         .fontWeight(.black)
                         .foregroundColor(.white)
                         .tracking(2)
                     
-                    Text("Descubra o mundo ao seu redor")
+                    Text("Descubra cultura ao seu redor")
                         .font(.subheadline)
                         .foregroundColor(.white.opacity(0.8))
                     
