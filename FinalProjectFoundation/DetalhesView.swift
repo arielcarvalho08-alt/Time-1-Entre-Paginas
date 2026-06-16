@@ -57,16 +57,23 @@ struct DetalhesView: View {
                         if let web = contato.website, !web.isEmpty { Text("🌐 Site: \(web)") }
                     }
                     
-                    Text("Horários de Funcionamento").font(.headline)
+                    Text("Horários de Funcionamento")
+                        .font(.headline)
+
                     VStack(spacing: 8) {
                         ForEach(local.horarios, id: \.id_horario) { horario in
                             HStack {
                                 Text(horario.dia_semana)
+                                
                                 Spacer()
-                                if let abertura = horario.hora_abertura, let fechamento = horario.hora_fechamento, !abertura.isEmpty, !fechamento.isEmpty {
+                                
+                                if let abertura = horario.hora_abertura,
+                                   let fechamento = horario.hora_fechamento,
+                                   !abertura.isEmpty,
+                                   !fechamento.isEmpty {
                                     Text("\(abertura) às \(fechamento)")
                                 } else {
-                                    Text(horario.status_dia ?? "Fechado")
+                                    Text("Fechado")
                                         .foregroundColor(.secondary)
                                 }
                             }
