@@ -1,4 +1,5 @@
 import SwiftUI
+import MapKit 
 
 struct DetalhesView: View {
     let local: Local
@@ -64,6 +65,7 @@ struct DetalhesView: View {
                         ForEach(local.horarios, id: \.id_horario) { horario in
                             HStack {
                                 Text(horario.dia_semana)
+                                
                                 Spacer()
                                 
                                 if let abertura = horario.hora_abertura,
@@ -113,8 +115,15 @@ struct DetalhesView: View {
                 title: Text("Você está saindo do App"),
                 message: Text("Deseja abrir o Apple Maps para traçar a rota até \(local.nome)?"),
                 primaryButton: .default(Text("Sim")) {
-                    let url = URL(string: "http://maps.apple.com/?daddr=\(local.latitude ?? -3.7318),\(local.longitude ?? -38.5266)&dirflg=d")!
-                    UIApplication.shared.open(url)
+                    if let lat = local.latitude, let lon = local.longitude {
+                        let destinoCoordenadas = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+                        let placemark = MKPlacemark(coordinate: destinoCoordenadas)
+                        let mapItem = MKMapItem(placemark: placemark)
+                        mapItem.name = local.nome
+                        
+                        let opcoesLancamento = [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving]
+                        mapItem.openInMaps(launchOptions: opcoesLancamento)
+                    }
                 },
                 secondaryButton: .cancel(Text("Cancelar"))
             )
