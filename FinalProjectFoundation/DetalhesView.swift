@@ -64,7 +64,6 @@ struct DetalhesView: View {
                         ForEach(local.horarios, id: \.id_horario) { horario in
                             HStack {
                                 Text(horario.dia_semana)
-                                
                                 Spacer()
                                 
                                 if let abertura = horario.hora_abertura,
