@@ -5,13 +5,24 @@
 //  Created by Found on 02/06/26.
 //
 
+
 import SwiftUI
+import CoreLocation
+
 
 struct LocalRowView: View {
     let local: Local
+    
+    private var isLocationAuthorized: Bool {
+        let manager = CLLocationManager()
+        return CLLocationManager.locationServicesEnabled() &&
+            (manager.authorizationStatus == .authorizedWhenInUse ||
+             manager.authorizationStatus == .authorizedAlways)
+    }
         
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {            Image(local.nome.localizedCaseInsensitiveContains("Cuca") ? "cuca_mondubim" : "bece")
+        VStack(alignment: .leading, spacing: 0) {
+            Image(local.nome.localizedCaseInsensitiveContains("Cuca") ? "cuca_mondubim" : "bece")
                 .resizable()
                 .scaledToFill()
                 .frame(height: 160)
@@ -29,13 +40,17 @@ struct LocalRowView: View {
                         .foregroundColor(.orange)
                         .font(.subheadline)
                     
-                    Text("•")
+                    if isLocationAuthorized {
+                        Text("•")
+                            .foregroundColor(.secondary)
+                        
+                        Text("A \(local.distanciaCalculada) km de você")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
                     
-                    Text(String(format: "%.1f km", local.distancia_simulada))
-                        .font(.subheadline)
+                    Text("•")
                         .foregroundColor(.secondary)
-                    
-                    Text("•")
                     
                     Text("\(local.bairro)")
                         .font(.subheadline)
@@ -58,7 +73,8 @@ struct LocalRowView: View {
         .background(Color(.systemBackground))
         .cornerRadius(12)
         .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
-        .padding(.horizontal) // Dá um respiro nas laterais da lista
+        .padding(.horizontal)
         .padding(.vertical, 6)
     }
 }
+

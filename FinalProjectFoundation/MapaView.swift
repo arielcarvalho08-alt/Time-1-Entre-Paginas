@@ -72,6 +72,7 @@ struct MapaView: View {
                     .onChange(of: viewModel.textoPesquisa) { texto in
                         mostrarSugestoesMap = !texto.isEmpty
                     }
+                    
                     if mostrarSugestoesMap && !filtrarLocaisSugeridos().isEmpty {
                         VStack(alignment: .leading, spacing: 0) {
                             ScrollView {
@@ -79,10 +80,8 @@ struct MapaView: View {
                                     ForEach(filtrarLocaisSugeridos(), id: \.id) { local in
                                         Button(action: {
                                             focarNoLocal(porNome: local.nome)
-                                            
                                             mostrarSugestoesMap = false
                                             viewModel.textoPesquisa = ""
-                                            
                                             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                                         }) {
                                             HStack(spacing: 12) {
@@ -109,6 +108,31 @@ struct MapaView: View {
                         .padding(.horizontal)
                         .padding(.top, 6)
                     }
+                }
+                
+                VStack {
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            withAnimation(.easeInOut(duration: 0.8)) {
+                                region = MKCoordinateRegion(
+                                    center: CLLocationCoordinate2D(latitude: -3.7319, longitude: -38.5267),
+                                    span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+                                )
+                            }
+                        }) {
+                            Image(systemName: "location.fill")
+                                .font(.title2)
+                                .foregroundColor(.verdePrincipal)
+                                .padding(12)
+                                .background(Color(.systemBackground))
+                                .clipShape(Circle())
+                                .shadow(radius: 4)
+                        }
+                        .padding(.trailing, 16)
+                        .padding(.top, 80)
+                    }
+                    Spacer()
                 }
                 
                 if let local = localSelecionado {
