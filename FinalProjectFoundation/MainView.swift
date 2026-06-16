@@ -11,8 +11,14 @@ struct MainView: View {
     @State private var mostrandoFiltros = false
     @StateObject private var viewModel = LocaisViewModel()
     @State var abaSelecionada: Int
-    @State private var localSelecionadoViaSugestao: Local? // Controla a navegação direta
-    @State private var irParaDetalhesDireto = false // Dispara a transição
+    @State private var localSelecionadoViaSugestao: Local?
+    @State private var irParaDetalhesDireto = false
+    
+    private var locaisFiltrados: [Local] {
+        viewModel.locais.filter { local in
+            viewModel.textoPesquisa.isEmpty ? true : local.nome.localizedCaseInsensitiveContains(viewModel.textoPesquisa)
+        }
+    }
     
     init(abaInicial: Int) {
         _abaSelecionada = State(initialValue: abaInicial)
@@ -30,12 +36,32 @@ struct MainView: View {
                         .padding(.bottom, 12)
                     
                     ZStack(alignment: .top) {
-                        List(viewModel.locais.filter { viewModel.textoPesquisa.isEmpty ? true : $0.nome.localizedCaseInsensitiveContains(viewModel.textoPesquisa) }) { local in
-                            NavigationLink(destination: DetalhesView(local: local)) {
-                                LocalRowView(local: local)
+                        
+                        if locaisFiltrados.isEmpty && !viewModel.textoPesquisa.isEmpty {
+                            VStack(spacing: 12) {
+                                Spacer()
+                                Image(systemName: "magnifyingglass.circle")
+                                    .font(.system(size: 64))
+                                    .foregroundColor(.gray)
+                                Text("Nenhum local encontrado")
+                                    .font(.headline)
+                                    .foregroundColor(.primary)
+                                Text("Tente mudar os termos ou verificar a ortografia do bairro.")
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                                    .multilineTextAlignment(.center)
+                                    .padding(.horizontal, 32)
+                                Spacer()
                             }
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        } else {
+                            List(locaisFiltrados) { local in
+                                NavigationLink(destination: DetalhesView(local: local)) {
+                                    LocalRowView(local: local)
+                                }
+                            }
+                            .listStyle(.plain)
                         }
-                        .listStyle(.plain)
                         
                         if let localDestino = localSelecionadoViaSugestao {
                             NavigationLink(
@@ -99,7 +125,6 @@ struct MainView: View {
         .accentColor(.verdePrincipal)
     }
 }
-
 #Preview {
     MainView(abaInicial: 0)
 }
