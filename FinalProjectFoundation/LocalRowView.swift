@@ -8,48 +8,57 @@
 import SwiftUI
 
 struct LocalRowView: View {
-        let nome: String
-        let tipo: String
-        let endereco: String
-        let avaliacao: Double
-        let abertoAgora: Bool
-        let distancia: String
+    let local: Local
         
     var body: some View {
-        HStack(alignment: .top, spacing: 12) {
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color(.systemGray5))
-                .frame(width: 100, height: 100)
-                .overlay(Image(systemName: "photo").foregroundColor(.gray))
+        VStack(alignment: .leading, spacing: 0) {            Image(local.nome.localizedCaseInsensitiveContains("Cuca") ? "cuca_mondubim" : "bece")
+                .resizable()
+                .scaledToFill()
+                .frame(height: 160)
+                .cornerRadius(12)
+                .clipped()
+            
             VStack(alignment: .leading, spacing: 4) {
-                Text(nome)
-                    .font(.system(.headline, design: .rounded))
+                Text(local.nome)
+                    .font(.headline)
                     .fontWeight(.bold)
-                Text("\(tipo), \(endereco)")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.primary)
+                
                 HStack {
-                    Label(String(format: "%.1f", avaliacao), systemImage: "star.fill")
-                        .font(.caption)
+                    Text(String(format: "★ %.1f", local.mediaAvaliacao))
                         .foregroundColor(.orange)
+                        .font(.subheadline)
+                    
+                    Text("•")
+                    
+                    Text(String(format: "%.1f km", local.distancia_simulada))
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                    
+                    Text("•")
+                    
+                    Text("\(local.bairro)")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
                     
                     Spacer()
-                Text(abertoAgora ? "Aberto agora" : "Fechado")
+                    
+                    Text(local.aberto_agora ? "Aberto" : "Fechado")
                         .font(.caption)
-                        .fontWeight(.bold)
-                        .padding(.horizontal,8)
+                        .bold()
+                        .padding(.horizontal, 8)
                         .padding(.vertical, 4)
-                        .background(abertoAgora ? Color.green.opacity(0.15) : Color.red.opacity(0.15))
-                        .foregroundColor(abertoAgora ? .green : .red)
-                        .clipShape(Capsule())
+                        .background(local.aberto_agora ? Color.green.opacity(0.2) : Color.red.opacity(0.2))
+                        .foregroundColor(local.aberto_agora ? .green : .red)
+                        .cornerRadius(8)
                 }
             }
+            .padding(12)
         }
-        .padding(.vertical, 4)
+        .background(Color(.systemBackground))
+        .cornerRadius(12)
+        .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
+        .padding(.horizontal) // Dá um respiro nas laterais da lista
+        .padding(.vertical, 6)
     }
 }
-
-
-//#Preview {
-//    LocalRowView()
-//}
