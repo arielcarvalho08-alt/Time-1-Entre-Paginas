@@ -9,12 +9,28 @@ import SwiftUI
 
 struct MainView: View {
     @State private var mostrandoFiltros = false
-
+    @StateObject private var viewModel = LocaisViewModel()
+    @State var abaSelecionada: Int
+    
+    init(abaInicial: Int) {
+        _abaSelecionada = State(initialValue: abaInicial)
+    }
+    
     var body: some View {
-        TabView {
+        TabView(selection: $abaSelecionada) {
             NavigationView {
-                List {
-                    Text("Lista de locais")
+                VStack {
+                    TextField("Pesquisar por nome ou bairro...", text: $viewModel.textoPesquisa)
+                        .padding(8)
+                        .background(Color(.systemGray6))
+                        .cornerRadius(8)
+                        .padding(.horizontal)
+                    
+                    List(viewModel.locais) { local in
+                        NavigationLink(destination: DetalhesView(local: local)) {
+                            LocalRowView(local: local)
+                        }
+                    }
                 }
                 .navigationTitle("Lista de locais")
                 .navigationBarItems(trailing: Button(action: { mostrandoFiltros = true }) {
@@ -22,15 +38,17 @@ struct MainView: View {
                 })
             }
             .tabItem { Label("Locais", systemImage: "list.bullet") }
-
-            Text("Mapa")
-                .tabItem { Label("Explorar", systemImage: "map") }
+            .tag(0)
+            
+            MapaView(viewModel: viewModel)
+                .tabItem { Label("Explorar", systemImage: "map")}
+                .tag(1)
         }
-        .sheet(isPresented: $mostrandoFiltros) { FiltrosView() }
+        .sheet(isPresented: $mostrandoFiltros) { FiltrosView(viewModel: viewModel) }
+        .accentColor(.verdePrincipal)
     }
 }
 
-
 #Preview {
-    MainView()
+    MainView(abaInicial: 0)
 }
