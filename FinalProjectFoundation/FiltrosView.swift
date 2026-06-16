@@ -4,14 +4,6 @@ struct FiltrosView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var viewModel: LocaisViewModel
     
-    @State private var contatoDisponivel = false
-    @State private var tiposSelecionados: [String: Bool] = [
-        "Bibliotecas Comunitárias": true,
-        "Cucas (Rede Cuca)": true,
-        "Escolas Públicas": true,
-        "Pontos de Leitura": true
-    ]
-    
     let opcoesAvaliacao = ["Todas", "+4,5 ★", "+4,0 ★", "+3,5 ★", "+3,0 ★"]
     
     var body: some View {
@@ -36,7 +28,7 @@ struct FiltrosView: View {
                                             .fontWeight(.medium)
                                             .padding(.horizontal, 12)
                                             .padding(.vertical, 8)
-                                            .background(viewModel.avaliacaoSelecionada == opcao ? Color.blue : Color(.systemGray5))
+                                            .background(viewModel.avaliacaoSelecionada == opcao ? Color.verdePrincipal : Color(.systemGray5))
                                             .foregroundColor(viewModel.avaliacaoSelecionada == opcao ? .white : .primary)
                                             .clipShape(Capsule())
                                     }
@@ -55,24 +47,26 @@ struct FiltrosView: View {
                                 .fontWeight(.bold)
                         }
                         Slider(value: $viewModel.distanciaMaxima, in: 1...20, step: 1)
+                            .accentColor(.verdePrincipal)
                     }
                     
-                    Toggle("Contato disponível", isOn: $contatoDisponivel)
+                    Toggle("Contato disponível", isOn: $viewModel.contatoDisponivel)
                 }
                 
                 Section(header: Text("Tipo de instituição")) {
-                    ForEach(tiposSelecionados.keys.sorted(), id: \.self) { tipo in
+                    ForEach(viewModel.tiposSelecionados.keys.sorted(), id: \.self) { tipo in
                         HStack {
                             Text(tipo)
                             Spacer()
-                            if tiposSelecionados[tipo] == true {
+                            if viewModel.tiposSelecionados[tipo] == true {
                                 Image(systemName: "checkmark")
-                                    .foregroundColor(.blue)
+                                    .foregroundColor(.verdePrincipal)
+                                    .fontWeight(.bold)
                             }
                         }
                         .contentShape(Rectangle())
                         .onTapGesture {
-                            tiposSelecionados[tipo]?.toggle()
+                            viewModel.tiposSelecionados[tipo]?.toggle()
                         }
                     }
                 }
@@ -80,13 +74,25 @@ struct FiltrosView: View {
             .listStyle(InsetGroupedListStyle())
             .navigationBarTitle("Filtros", displayMode: .inline)
             .navigationBarItems(
-                leading: Button("Cancelar") { dismiss() },
-                trailing: Button("Limpar Tudo") {
-                    viewModel.apenasAbertos = false
-                    viewModel.distanciaMaxima = 20.0
-                    viewModel.avaliacaoSelecionada = "Todas"
-                    contatoDisponivel = false
-                    for key in tiposSelecionados.keys { tiposSelecionados[key] = true }
+                leading: Button("Cancelar") {
+                    dismiss()
+                },
+                trailing: HStack(spacing:16) {
+                    Button("Limpar") {
+                        viewModel.apenasAbertos = false
+                        viewModel.distanciaMaxima = 20.0
+                        viewModel.avaliacaoSelecionada = "Todas"
+                        viewModel.contatoDisponivel = false
+                        for key in viewModel.tiposSelecionados.keys { viewModel.tiposSelecionados[key] = true
+                        }
+                    }
+                    .foregroundColor(.secondary)
+                    
+                    Button("Aplicar") {
+                        dismiss()
+                    }
+                    .foregroundColor(.verdePrincipal)
+                    .fontWeight(.bold)
                 }
             )
         }
