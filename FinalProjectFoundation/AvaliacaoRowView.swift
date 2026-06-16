@@ -9,31 +9,34 @@ import SwiftUI
 
 struct AvaliacaoRowView: View {
     let avaliacao: Avaliacao
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            HStack {
-                HStack(spacing: 2) {
+
+            HStack (spacing: 4){
+                HStack(spacing: 1) {
                     ForEach(0..<5) { estrela in
                         Image(systemName: "star.fill")
-                            .foregroundColor(Double(estrela) < avaliacao.nota_estrelas ? .orange : .gray.opacity(0.3))
-                            .font(.caption)
+                            .foregroundColor(Double(estrela) < avaliacao.nota_estrelas ? .orange : .gray.opacity(0.2))
+                            .font(.system(size: 11))
                     }
                 }
-                Spacer()
-                Text(String(format: "%.1f  􀋃", avaliacao.nota_estrelas) )
+                Text(String(format: "%.1f ", avaliacao.nota_estrelas) )
                     .font(.caption)
                     .bold()
                     .foregroundColor(.orange)
+                
+                Spacer()
             }
             if let comentario = avaliacao.comentario, !comentario.isEmpty {
                 Text(comentario)
-                    .font(.footnote)
-                    .foregroundColor(.orange)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .lineLimit(3)
+                    .padding(.top, 2)
             }
         }
-        .padding()
-        .background(Color(.secondarySystemBackground))
-        .cornerRadius(8)
+        .padding(.vertical, 6)
     }
 }
 //#Preview {

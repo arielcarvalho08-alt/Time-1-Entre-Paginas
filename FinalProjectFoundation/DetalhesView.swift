@@ -53,40 +53,45 @@ struct DetalhesView: View {
                     
                     if let contato = local.contato {
                         Text("Contatos").font(.headline)
-                        if let tel = contato.telefone { Text("📞 Telefone: \(tel)") }
-                        if let web = contato.website { Text("🌐 Site: \(web)") }
+                        if let tel = contato.telefone, !tel.isEmpty { Text("📞 Telefone: \(tel)") }
+                        if let web = contato.website, !web.isEmpty { Text("🌐 Site: \(web)") }
                     }
                     
                     Text("Horários de Funcionamento").font(.headline)
-                    ForEach(local.horarios, id: \.id_horario) { horario in
-                        HStack {
-                            Text(horario.dia_semana)
-                            Spacer()
-                            if let abertura = horario.hora_abertura, let fechamento = horario.hora_fechamento {
-                                Text("\(abertura) às \(fechamento)")
-                            } else {
-                                Text(horario.status_dia ?? "Fechado")
-                                    .foregroundColor(.secondary)
-                            }
-                            
-                            Divider().padding(.vertical, 8)
-
-                            VStack(alignment: .leading, spacing: 12) {
-                                Text("Avaliações da Comunidade")
-                                    .font(.headline)
-                                
-                                if local.avaliacoes.isEmpty {
-                                    Text("Nenhum comentário enviado.")
-                                        .font(.subheadline)
-                                        .foregroundColor(.secondary)
+                    VStack(spacing: 8) {
+                        ForEach(local.horarios, id: \.id_horario) { horario in
+                            HStack {
+                                Text(horario.dia_semana)
+                                Spacer()
+                                if let abertura = horario.hora_abertura, let fechamento = horario.hora_fechamento, !abertura.isEmpty, !fechamento.isEmpty {
+                                    Text("\(abertura) às \(fechamento)")
                                 } else {
-                                    ForEach(local.avaliacoes, id: \.id_avaliacao) { avaliacao in
-                                        AvaliacaoRowView(avaliacao: avaliacao)
-                                    }
+                                    Text(horario.status_dia ?? "Fechado")
+                                        .foregroundColor(.secondary)
+                                }
+                            }
+                            .font(.subheadline)
+                        }
+                    }
+                    Divider().padding(.vertical, 8)
+                    
+                    Text("Avaliações do Google")
+                        .font(.headline)
+                    
+                    if local.avaliacoes.isEmpty {
+                        Text("Nenhum comentário enviado.")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    } else {
+                        VStack(alignment: .leading, spacing: 12) {
+                            ForEach(local.avaliacoes, id: \.id_avaliacao) { avaliacao in
+                                AvaliacaoRowView(avaliacao: avaliacao)
+                                
+                                if avaliacao.id_avaliacao != local.avaliacoes.last?.id_avaliacao {
+                                    Divider().opacity(0.4)
                                 }
                             }
                         }
-                        .font(.subheadline)
                     }
                 }
                 .padding(.horizontal)
