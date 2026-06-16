@@ -19,6 +19,7 @@ struct MainView: View {
             if viewModel.textoPesquisa.isEmpty {
                 return true
             } else {
+                // Melhoria: Permite que a lista filtre tanto por Nome quanto por Bairro
                 return local.nome.localizedCaseInsensitiveContains(viewModel.textoPesquisa) ||
                        local.bairro.localizedCaseInsensitiveContains(viewModel.textoPesquisa)
             }
@@ -33,9 +34,12 @@ struct MainView: View {
         TabView(selection: $abaSelecionada) {
             NavigationView {
                 VStack(spacing: 0) {
+                    
+                    // TEXTFIELD ATUALIZADO COM O COMPORTAMENTO DO ENTER
                     TextField("Pesquisar por nome ou bairro...", text: $viewModel.textoPesquisa)
-                        .submitLabel(.search)
+                        .submitLabel(.search) // Altera a tecla Enter para o botão azul "Buscar"
                         .onSubmit {
+                            // CORREÇÃO: Fecha o teclado nativo do iOS ao pressionar Enter
                             UIApplication.shared.sendAction(
                                 #selector(UIResponder.resignFirstResponder),
                                 to: nil,
@@ -86,6 +90,7 @@ struct MainView: View {
                             }
                         }
                         
+                        // Menu suspenso flutuante com sugestões rápidas
                         if !viewModel.textoPesquisa.isEmpty {
                             VStack(alignment: .leading, spacing: 0) {
                                 ScrollView {
