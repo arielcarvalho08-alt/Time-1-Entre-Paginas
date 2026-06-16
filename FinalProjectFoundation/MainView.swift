@@ -99,3 +99,7 @@ struct MainView: View {
         .accentColor(.verdePrincipal)
     }
 }
+
+#Preview {
+    MainView(abaInicial: 0)
+}
