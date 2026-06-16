@@ -39,6 +39,3 @@ struct AvaliacaoRowView: View {
         .padding(.vertical, 6)
     }
 }
-//#Preview {
-//    AvaliacaoRowView()
-//}

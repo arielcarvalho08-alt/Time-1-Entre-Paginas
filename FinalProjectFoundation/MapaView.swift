@@ -72,7 +72,6 @@ struct MapaView: View {
                     .onChange(of: viewModel.textoPesquisa) { texto in
                         mostrarSugestoesMap = !texto.isEmpty
                     }
-                    
                     if mostrarSugestoesMap && !filtrarLocaisSugeridos().isEmpty {
                         VStack(alignment: .leading, spacing: 0) {
                             ScrollView {
@@ -80,8 +79,10 @@ struct MapaView: View {
                                     ForEach(filtrarLocaisSugeridos(), id: \.id) { local in
                                         Button(action: {
                                             focarNoLocal(porNome: local.nome)
+                                            
                                             mostrarSugestoesMap = false
                                             viewModel.textoPesquisa = ""
+                                            
                                             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                                         }) {
                                             HStack(spacing: 12) {

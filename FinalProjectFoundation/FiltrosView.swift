@@ -1,3 +1,10 @@
+//
+//  FiltrosView.swift
+//  FinalProjectFoundation
+//
+//  Created by Found on 11/06/26.
+//
+
 import SwiftUI
 
 struct FiltrosView: View {

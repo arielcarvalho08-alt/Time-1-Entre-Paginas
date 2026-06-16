@@ -59,9 +59,6 @@ struct Local: Identifiable, FetchableRecord, TableRecord, Decodable {
     var contato: Contato?
     var horarios: [HorarioFuncionamento] = []
     var avaliacoes: [Avaliacao] = []
-    var distanciaCalculada: Double {
-        return distancia_simulada
-    }
     
     var mediaAvaliacao: Double {
         if avaliacoes.isEmpty { return 4.5 }

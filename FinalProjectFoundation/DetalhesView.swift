@@ -1,5 +1,13 @@
+//
+//  DetalhesView.swift
+//  FinalProjectFoundation
+//
+//  Created by Found on 11/06/26.
+//
+
+
 import SwiftUI
-import MapKit 
+import MapKit
 
 struct DetalhesView: View {
     let local: Local
@@ -39,13 +47,18 @@ struct DetalhesView: View {
                     }
                     
                     Button(action: { mostrarAlertaRota = true }) {
-                        Text("Traçar Rota")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.verdePrincipal)
-                            .cornerRadius(10)
+                        HStack {
+                            Spacer()
+                            Image(systemName: "arrow.triangle.turn.up.right.diamond.fill")
+                            Text("Traçar Rota")
+                                .font(.headline)
+                                .fontWeight(.bold)
+                            Spacer()
+                        }
+                        .padding(.vertical, 16)
+                        .foregroundColor(.white)
+                        .background(Color.verdePrincipal)
+                        .cornerRadius(10)
                     }
                     
                     Text("Endereço").font(.headline)
@@ -54,8 +67,36 @@ struct DetalhesView: View {
                     
                     if let contato = local.contato {
                         Text("Contatos").font(.headline)
-                        if let tel = contato.telefone, !tel.isEmpty { Text("📞 Telefone: \(tel)") }
-                        if let web = contato.website, !web.isEmpty { Text("🌐 Site: \(web)") }
+                        
+                        if let tel = contato.telefone, !tel.isEmpty {
+                            Button(action: {
+                                let fixo = tel.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
+                                if let url = URL(string: "tel://\(fixo)") {
+                                    UIApplication.shared.open(url)
+                                }
+                            }) {
+                                HStack {
+                                    Text("📞 Telefone: \(tel)")
+                                        .foregroundColor(.verdePrincipal)
+                                        .underline()
+                                    Spacer()
+                                }
+                            }
+                        }
+                        
+                        if let web = contato.website, !web.isEmpty {
+                            let urlString = web.lowercased().hasPrefix("http") ? web : "https://\(web)"
+                            if let url = URL(string: urlString) {
+                                Link(destination: url) {
+                                    HStack {
+                                        Text("🌐 Site: \(web)")
+                                            .foregroundColor(.verdePrincipal)
+                                            .underline()
+                                        Spacer()
+                                    }
+                                }
+                            }
+                        }
                     }
                     
                     Text("Horários de Funcionamento")
