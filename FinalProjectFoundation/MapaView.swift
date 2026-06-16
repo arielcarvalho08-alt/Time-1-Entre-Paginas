@@ -186,7 +186,6 @@ struct MapaView: View {
         }
     }
 }
-
 //#Preview {
 //    MapaView()
 //}
