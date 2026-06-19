@@ -5,7 +5,6 @@
 //  Created by Found on 11/06/26.
 //
 
-
 import SwiftUI
 import MapKit
 
@@ -17,7 +16,7 @@ struct DetalhesView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                Image(local.nome.localizedCaseInsensitiveContains("Cuca") ? "cuca_mondubim" : "bece")
+                Image(obterNomeImagemManual(para: local))
                     .resizable()
                     .scaledToFill()
                     .frame(height: 220)
@@ -103,14 +102,14 @@ struct DetalhesView: View {
                         .font(.headline)
 
                     VStack(spacing: 8) {
-                        ForEach(local.horarios, id: \.id_horario) { horario in
+                        ForEach(local.horarios, id: \.id_horario) { teammate in
                             HStack {
-                                Text(horario.dia_semana)
+                                Text(teammate.dia_semana)
                                 
                                 Spacer()
                                 
-                                if let abertura = horario.hora_abertura,
-                                   let fechamento = horario.hora_fechamento,
+                                if let abertura = teammate.hora_abertura,
+                                   let fechamento = teammate.hora_fechamento,
                                    !abertura.isEmpty,
                                    !fechamento.isEmpty {
                                     Text("\(abertura) às \(fechamento)")
@@ -169,5 +168,30 @@ struct DetalhesView: View {
                 secondaryButton: .cancel(Text("Cancelar"))
             )
         }
+    }
+    
+    private func obterNomeImagemManual(para local: Local) -> String {
+        let nomeMinusculo = local.nome.lowercased()
+        
+        if nomeMinusculo.contains("cuca") {
+            if nomeMinusculo.contains("mondubim") { return "cuca_mondubim" }
+            if nomeMinusculo.contains("barra") { return "cuca_barra" }
+            if nomeMinusculo.contains("jangurussu") { return "cuca_jangurussu" }
+            if nomeMinusculo.contains("pici") { return "cuca_pici" }
+            if nomeMinusculo.contains("walter") { return "cuca_josewalter" }
+            return "cuca_mondubim"
+        } else if nomeMinusculo.contains("bece") || nomeMinusculo.contains("estado") {
+            return "foto_bece"
+        } else if nomeMinusculo.contains("comunitária") {
+            return "biblioteca_cuca_pici"
+        } else if nomeMinusculo.contains("nordeste") || nomeMinusculo.contains("ccbnb") {
+            return "foto_ccbnb"
+        } else if nomeMinusculo.contains("dolor") {
+            return "biblioteca_dolor"
+        } else if nomeMinusculo.contains("vila") || nomeMinusculo.contains("artes") {
+            return "vila_das_artes"
+        }
+        
+        return "foto_bece"
     }
 }
