@@ -19,8 +19,6 @@ struct FiltrosView: View {
                 Section(header: Text("Filtros")) {
                     Toggle(isOn: $viewModel.apenasFavoritos) {
                         HStack(spacing: 12) {
-                            Image(systemName: "heart.fill")
-                                .foregroundColor(.red)
                             Text("Apenas Favoritos")
                         }
                     }
