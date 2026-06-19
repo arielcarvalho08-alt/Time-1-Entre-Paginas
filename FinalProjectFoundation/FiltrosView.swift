@@ -17,6 +17,14 @@ struct FiltrosView: View {
         NavigationView {
             List {
                 Section(header: Text("Filtros")) {
+                    Toggle(isOn: $viewModel.apenasFavoritos) {
+                        HStack(spacing: 12) {
+                            Image(systemName: "heart.fill")
+                                .foregroundColor(.red)
+                            Text("Apenas Favoritos")
+                        }
+                    }
+                    
                     Toggle("Aberto Agora", isOn: $viewModel.apenasAbertos)
                     
                     VStack(alignment: .leading, spacing: 8) {
@@ -86,11 +94,13 @@ struct FiltrosView: View {
                 },
                 trailing: HStack(spacing:16) {
                     Button("Limpar") {
+                        viewModel.apenasFavoritos = false 
                         viewModel.apenasAbertos = false
                         viewModel.distanciaMaxima = 20.0
                         viewModel.avaliacaoSelecionada = "Todas"
                         viewModel.contatoDisponivel = false
-                        for key in viewModel.tiposSelecionados.keys { viewModel.tiposSelecionados[key] = true
+                        for key in viewModel.tiposSelecionados.keys {
+                            viewModel.tiposSelecionados[key] = true
                         }
                     }
                     .foregroundColor(.secondary)
