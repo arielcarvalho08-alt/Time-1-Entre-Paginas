@@ -15,6 +15,7 @@ class LocaisViewModel: ObservableObject {
     @Published var apenasAbertos: Bool = false
     @Published var avaliacaoSelecionada: String = "Todas"
     @Published var contatoDisponivel: Bool = false
+    @Published var apenasFavoritos: Bool = false
     @Published var tiposSelecionados: [String: Bool] = [
         "Bibliotecas Comunitárias": true,
         "Cucas (Rede Cuca)": true,
@@ -27,12 +28,13 @@ class LocaisViewModel: ObservableObject {
     
     init() {
         carregarDadosdoBanco()
+        
         Publishers.CombineLatest4($textoPesquisa, $distanciaMaxima, $apenasAbertos, $avaliacaoSelecionada)
-            .combineLatest($contatoDisponivel, $tiposSelecionados)
+            .combineLatest($contatoDisponivel, $tiposSelecionados, $apenasFavoritos)
             .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
-            .sink { [weak self] primeiroBloco, contato, tipos in
+            .sink { [weak self] primeiroBloco, contato, tipos, favoritosApenas in
                 let (texto, distancia, abertos, avaliacao) = primeiroBloco
-                self?.filtrarLocais(texto: texto, distanciaMax: distancia, abertosApenas: abertos, avaliacaoMin: avaliacao, contatoApenas: contato, tipos: tipos)
+                self?.filtrarLocais(texto: texto, distanciaMax: distancia, abertosApenas: abertos, avaliacaoMin: avaliacao, contatoApenas: contato, tipos: tipos, favoritosApenas: favoritosApenas)
             }
             .store(in: &cancellables)
     }
@@ -46,7 +48,7 @@ class LocaisViewModel: ObservableObject {
         self.locais = dadosDoBanco
     }
     
-    private func filtrarLocais(texto: String, distanciaMax: Double, abertosApenas: Bool, avaliacaoMin: String, contatoApenas: Bool, tipos: [String: Bool]) {
+    private func filtrarLocais(texto: String, distanciaMax: Double, abertosApenas: Bool, avaliacaoMin: String, contatoApenas: Bool, tipos: [String: Bool], favoritosApenas: Bool) {
         var filtrados = todosLocais
         
         if !texto.isEmpty {
@@ -78,6 +80,13 @@ class LocaisViewModel: ObservableObject {
                            (contato.website != nil && !contato.website!.isEmpty)
                 }
                 return false
+            }
+        }
+        
+        if favoritosApenas {
+            filtrados = filtrados.filter { local in
+                guard let idLocal = local.id else { return false }
+                return DatabaseManager.shared.verificarSeEFavorito(idLocal: idLocal)
             }
         }
         

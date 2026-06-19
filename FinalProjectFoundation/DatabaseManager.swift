@@ -59,13 +59,13 @@ class DatabaseManager {
         guard let dbQueue = dbQueue else { return }
         let dataAtual = DateFormatter.localizedString(from: Date(), dateStyle: .short, timeStyle: .none)
         
-        try? dbQueue.write{ db in
+        try? dbQueue.write { db in
             let existe = try Int.fetchOne(db, sql: "SELECT COUNT(*) FROM Favorito WHERE idLocal = ?", arguments: [idLocal]) ?? 0
             if existe == 0 {
                 try db.execute(sql: "INSERT INTO Favorito (idLocal, data_adicionar) VALUES (?, ?)", arguments: [idLocal, dataAtual])
             }
             else {
-                try db.execute(sql: "DELETE FROM Favorito WHERE id_Local = ?", arguments: [idLocal])
+                try db.execute(sql: "DELETE FROM Favorito WHERE idLocal = ?", arguments: [idLocal])
             }
         }
     }
