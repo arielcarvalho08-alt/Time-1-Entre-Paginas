@@ -1,0 +1,21 @@
+{
+  "images" : [
+    {
+      "filename" : "avatar-Cuca-Che-Guevara-Rubens-Venâncio-2-be572d42cfaff351f0a0363386c0b671.jpg",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
