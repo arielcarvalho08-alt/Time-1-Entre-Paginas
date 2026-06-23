@@ -16,7 +16,13 @@ struct MainView: View {
     
     private var locaisFiltrados: [Local] {
         viewModel.locais.filter { local in
-            viewModel.textoPesquisa.isEmpty ? true : local.nome.localizedCaseInsensitiveContains(viewModel.textoPesquisa)
+            if viewModel.textoPesquisa.isEmpty {
+                return true
+            } else {
+                // Melhoria: Permite que a lista filtre tanto por Nome quanto por Bairro
+                return local.nome.localizedCaseInsensitiveContains(viewModel.textoPesquisa) ||
+                       local.bairro.localizedCaseInsensitiveContains(viewModel.textoPesquisa)
+            }
         }
     }
     
@@ -28,7 +34,19 @@ struct MainView: View {
         TabView(selection: $abaSelecionada) {
             NavigationView {
                 VStack(spacing: 0) {
+                    
+                    // TEXTFIELD ATUALIZADO COM O COMPORTAMENTO DO ENTER
                     TextField("Pesquisar por nome ou bairro...", text: $viewModel.textoPesquisa)
+                        .submitLabel(.search) // Altera a tecla Enter para o botão azul "Buscar"
+                        .onSubmit {
+                            // CORREÇÃO: Fecha o teclado nativo do iOS ao pressionar Enter
+                            UIApplication.shared.sendAction(
+                                #selector(UIResponder.resignFirstResponder),
+                                to: nil,
+                                from: nil,
+                                for: nil
+                            )
+                        }
                         .padding(12)
                         .background(Color(.systemGray6))
                         .cornerRadius(10)
@@ -72,6 +90,7 @@ struct MainView: View {
                             }
                         }
                         
+                        // Menu suspenso flutuante com sugestões rápidas
                         if !viewModel.textoPesquisa.isEmpty {
                             VStack(alignment: .leading, spacing: 0) {
                                 ScrollView {
@@ -105,7 +124,7 @@ struct MainView: View {
                             .cornerRadius(12)
                             .shadow(color: Color.black.opacity(0.15), radius: 8, x: 0, y: 4)
                             .padding(.horizontal)
-                            .zIndex(5)
+                            .zIndex(5) // Mantém a caixa flutuando sobre as linhas da lista
                         }
                     }
                 }
@@ -125,6 +144,7 @@ struct MainView: View {
         .accentColor(.verdePrincipal)
     }
 }
+
 #Preview {
     MainView(abaInicial: 0)
 }
